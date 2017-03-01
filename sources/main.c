@@ -151,10 +151,15 @@ int		main(int ac, char **av)
 	// ft_print_doubletab(map);
 	if (!parse_map(map, &env))
 		return (ft_error_msg("ERROR", 0));
-	// if (!solve_lemin(env, map))
-		// return (ft_error_msg("ERROR", 0));
+	if (!apply_dist_points(env))
+		return (0);
+	print_room_list(env);
+	if (!find_valid_paths(&env))
+		return (ft_error_msg("ERROR", 0));
+	// print_room_list(env);
+	// moove_ants_in_path(env, ants);
 	// ft_print_doubletab(env.original_map);
-	printf("nb : %d\n", env.nb_ants);
+	print_path(env);
 	ft_free_double_pointer((void***)&map);
 	free_anthill(&env);
 	return (0);

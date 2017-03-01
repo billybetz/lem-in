@@ -20,7 +20,7 @@ void	print_room_list(t_env env)
 	tmp = env.start;
 	while (tmp)
 	{
-		printf("name : %s\n", tmp->name);
+		printf("name : %s (dist_point : %d)\n", tmp->name, tmp->dist_point);
 		tmp2 = tmp->connection;
 		while (tmp2)
 		{
@@ -60,6 +60,12 @@ t_room		*create_maillon_room(char *name, int start, int end, int coord[2])
 	room->coord[1] = coord[1];
 	room->connection = NULL;
 	room->next = NULL;
+	if (room->start)
+		room->dist_point = -1;
+	else if (room->end)
+		room->dist_point = 0;
+	else
+		room->dist_point = -2;
 	return (room);
 }
 
@@ -121,6 +127,8 @@ int		add_connection(t_env *env, char *name1, char *name2)
 
 	tmp = env->start;
 	tmp2 = env->start;
+	if (!ft_strcmp(name1, name2))
+		return (0);
 	if (!tmp)
 		return (0);
 	while (ft_strcmp(tmp->name, name1))
@@ -134,7 +142,11 @@ int		add_connection(t_env *env, char *name1, char *name2)
 	else
 	{
 		while (link_tmp->next)
+		{
+			if (!ft_strcmp(link_tmp->room->name, name2))
+				return (0);
 			link_tmp = link_tmp->next;
+		}
 		link_tmp->next = create_maillon_connection(tmp2);
 	}
 	if (!(link_tmp2 = tmp2->connection))
@@ -269,6 +281,6 @@ int		parse_map(char **map, t_env *env)
 		ft_free_double_pointer((void ***)&line);
 		i++;
 	}
-	print_room_list(*env);
+	// print_room_list(*env);
 	return (1);
 }
