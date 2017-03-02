@@ -14,8 +14,8 @@
 
 void	print_path(t_env env)
 {
-	t_room *tmp;
-	int i;
+	t_room	*tmp;
+	int		i;
 
 	i = 0;
 	printf("\n---------\n");
@@ -34,11 +34,10 @@ void	print_path(t_env env)
 	printf("---------\n\n");
 }
 
-void	add_room_to_paths(t_env *env, int i, t_room *r, t_room ***paths)
+void	add_room_to_paths(int i, t_room *r, t_room ***paths)
 {
 	t_room *tmp;
 
-	(void)env;
 	if (!(*paths)[i])
 	{
 		(*paths)[i] = create_maillon_room(r->name, r->start, r->end, r->coord);
@@ -56,21 +55,18 @@ void	add_room_to_paths(t_env *env, int i, t_room *r, t_room ***paths)
 
 int		get_smallest_dist(t_room *room)
 {
-	int nb;
-	t_link *tmp;
+	int		nb;
+	t_link	*tmp;
 
 	if (!room)
-		return (-2);
+		return (-8);
 	tmp = room->connection;
 	if (!tmp)
-		return (-2);
+		return (-8);
 	nb = -8;
 	while (tmp)
 	{
-		if ((tmp->room->dist_point < nb || nb == -8) &&
-		tmp->room->dist_point != -2 &&
-		tmp->room->dist_point != -5 &&
-		tmp->room->dist_point != -1)
+		if (tmp->room->dist_point >= 0 && (nb == -8 || (tmp->room->dist_point < nb)))
 			nb = tmp->room->dist_point;
 		tmp = tmp->next;
 	}
@@ -93,34 +89,34 @@ void	clear_path(t_room ***paths, int i)
 		tmp = tmp2;
 	}
 	(*paths)[i] = NULL;
-	
 }
 
 void	get_all_smaller_path(t_room *start, t_env *env)
 {
-	int	dist;
-	int i;
-	t_link *tmp_link;
-	t_link *tmp_link2;
-	t_room *room;
+	int		dist;
+	int		i;
+	t_link	*tmp_link;
+	t_link	*tmp_link2;
+	t_room	*room;
 
 	i = 0;
 	tmp_link = start->connection;
 	dist = get_smallest_dist(start);
 	while (dist != -2 && dist != -5 && dist != -8)
 	{
-		dist = get_smallest_dist(start);
 		room = start;
-		add_room_to_paths(env, i, room, &(env->paths));
+		if ((dist = get_smallest_dist(room)) == -8)
+			break ;
+		add_room_to_paths(i, room, &(env->paths));
 		tmp_link = start->connection;
 		while (tmp_link->room->dist_point != dist)
 			tmp_link = tmp_link->next;
 		room = tmp_link->room;
-		while (dist != 0)
+		while (dist != 0 && dist != -8)
 		{
 			if ((dist = get_smallest_dist(room)) == -8)
 				break ;
-			add_room_to_paths(env, i, room, &(env->paths));
+			add_room_to_paths(i, room, &(env->paths));
 			dist = get_smallest_dist(room);
 			tmp_link2 = room->connection;
 			while (tmp_link2->room->dist_point && tmp_link2->room->dist_point != dist)
@@ -130,7 +126,7 @@ void	get_all_smaller_path(t_room *start, t_env *env)
 		if (dist == -8)
 			clear_path(&(env->paths), i);
 		if (dist != -8)
-			add_room_to_paths(env, i, room, &(env->paths));
+			add_room_to_paths(i, room, &(env->paths));
 		if (dist != -8)
 			i++;
 	}
@@ -139,7 +135,7 @@ void	get_all_smaller_path(t_room *start, t_env *env)
 int		count_max_path(t_env *env)
 {
 	int		nb;
-	t_link *tmp;
+	t_link	*tmp;
 
 	nb = 0;
 	tmp = env->start->connection;
@@ -164,15 +160,17 @@ void	create_unique_path(t_env *env)
 	while (r->end != 1)
 		r = r->next;
 	((env->paths)[0])->next = create_maillon_room(r->name, r->start, r->end, r->coord);
+	((env->paths)[1]) = NULL;
+	env->unique_path = 1;
 }
 
 int		find_valid_paths(t_env *env)
 {
-	int dist;
-	int i;
-	int count;
-	t_room *tmp;
-	t_link *tmp2;
+	int		dist;
+	int		i;
+	int		count;
+	t_room	*tmp;
+	t_link	*tmp2;
 
 	dist = -2;
 	i = -1;
@@ -220,8 +218,8 @@ void	recursive_dist_points(t_room *tmp, int dist)
 
 int		apply_dist_points(t_env env)
 {
-	int dist;
-	t_room *tmp;
+	int		dist;
+	t_room	*tmp;
 
 	dist = 1;
 	tmp = env.start;

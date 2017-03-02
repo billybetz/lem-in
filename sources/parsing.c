@@ -20,11 +20,13 @@ void	print_room_list(t_env env)
 	tmp = env.start;
 	while (tmp)
 	{
-		printf("name : %s (dist_point : %d)\n", tmp->name, tmp->dist_point);
+		ft_putstr("Room ");
+		ft_putendl(tmp->name);
 		tmp2 = tmp->connection;
 		while (tmp2)
 		{
-			printf(" - connexion avec %s\n", tmp2->room->name);
+			ft_putstr(" - link with ");
+			ft_putendl(tmp2->room->name);
 			tmp2 = tmp2->next;
 		}
 		tmp = tmp->next;
@@ -32,7 +34,7 @@ void	print_room_list(t_env env)
 	ft_putchar('\n');
 }
 
-int			check_if_name_exist(char *name, t_env env)
+int		check_if_name_exist(char *name, t_env env)
 {
 	t_room	*tmp;
 
@@ -48,7 +50,7 @@ int			check_if_name_exist(char *name, t_env env)
 	return (0);
 }
 
-t_room		*create_maillon_room(char *name, int start, int end, int coord[2])
+t_room	*create_maillon_room(char *name, int start, int end, int coord[2])
 {
 	t_room *room;
 
@@ -60,6 +62,8 @@ t_room		*create_maillon_room(char *name, int start, int end, int coord[2])
 	room->coord[1] = coord[1];
 	room->connection = NULL;
 	room->next = NULL;
+	room->ant_name = -1;
+	room->nb_ants = 0;
 	if (room->start)
 		room->dist_point = -1;
 	else if (room->end)
@@ -111,7 +115,7 @@ int		get_room(char *line, t_env *env, int s, int e)
 t_link	*create_maillon_connection(t_room *room)
 {
 	t_link	*link;
-	
+
 	link = malloc(sizeof(t_link));
 	link->room = room;
 	link->next = NULL;
@@ -180,7 +184,7 @@ int		check_if_connect_exist(char *name1, char *name2, t_env env)
 
 int		get_connection(char *line, t_env *env)
 {
-	char 	**tab;
+	char	**tab;
 	int		i;
 
 	i = 0;
@@ -219,9 +223,9 @@ int		count_tiret(char *s)
 
 int		parse_map(char **map, t_env *env)
 {
-	char **line;
-	int nb_start_end[2];
-	int i;
+	char	**line;
+	int		nb_start_end[2];
+	int		i;
 
 	i = 0;
 	nb_start_end[0] = 0;
@@ -251,6 +255,10 @@ int		parse_map(char **map, t_env *env)
 			if (!get_room(map[i], env, 0, 1))
 				return (0);
 		}
+		else if (!ft_strcmp(map[i], "##path"))
+			env->print_path = 1;
+		else if (!ft_strcmp(map[i], "##connect"))
+			env->print_connection = 1;
 		else if (line[0] && !line[1])
 		{
 			ft_free_double_pointer((void ***)&line);
@@ -261,7 +269,7 @@ int		parse_map(char **map, t_env *env)
 			if (!map[i] || ft_count_words(map[i]) != 3)
 				return (0);
 			if (!get_room(map[i], env, 0, 0))
-				return (0); 
+				return (0);
 		}
 		ft_free_double_pointer((void ***)&line);
 	}
@@ -277,10 +285,9 @@ int		parse_map(char **map, t_env *env)
 		if (count_tiret(line[0]) != 1)
 			return (0);
 		if (!get_connection(line[0], env))
-				return (0);
+			return (0);
 		ft_free_double_pointer((void ***)&line);
 		i++;
 	}
-	// print_room_list(*env);
 	return (1);
 }

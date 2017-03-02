@@ -28,6 +28,7 @@ int		ft_get_file(char *av, char ***map)
 		ft_strdel(&line);
 		nb_return++;
 	}
+	ft_strdel(&line);
 	close(fd);
 	if (!(*map = (char**)malloc(sizeof(char*) * (nb_return + 1))))
 		return (0);

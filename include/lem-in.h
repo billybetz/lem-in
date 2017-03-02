@@ -27,10 +27,11 @@ struct	s_link
 struct	s_room
 {
 	char	*name;
+	int		ant_name;
 	int		nb_ants;
 	int		dist_point;
 	int		coord[2];
-	
+
 	int		start;
 	int		end;
 
@@ -42,8 +43,12 @@ typedef struct	s_env
 {
 	char		**original_map;
 	t_room		*start;
-	int			nb_ants;
 	t_room		**paths;
+	int			nb_ants;
+	int			arrive_ants;
+	int			unique_path;
+	int			print_path;
+	int			print_connection;
 }				t_env;
 
 int		parse_map(char **map, t_env *env);
@@ -52,3 +57,4 @@ void	print_room_list(t_env env);
 int		find_valid_paths(t_env *env);
 void	print_path(t_env env);
 t_room	*create_maillon_room(char *name, int start, int end, int coord[2]);
+void	moove_ants_in_paths(t_env *env);
