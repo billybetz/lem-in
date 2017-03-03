@@ -13,7 +13,7 @@ goal : put all the ants who begin in START room in the END room with the less nu
 condition : - only one ant by room
             - only one deplacement by ant by round
 
-File exemple : 
+File exemple :
 3
 ##START
 start 5 5
