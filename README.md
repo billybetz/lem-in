@@ -19,7 +19,7 @@ File exemple :
 start 5 5
 ##END
 end 10 10
-#comment : declaration of a ordinary room
+# comment : declaration of a ordinary room
 room1 5 5
 # another
 room2 7 7
