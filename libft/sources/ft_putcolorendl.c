@@ -1,27 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_get_stdin.c                                     :+:      :+:    :+:   */
+/*   ft_putcolorendl.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbetz <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/02/27 20:54:07 by bbetz             #+#    #+#             */
-/*   Updated: 2017/02/27 20:54:08 by bbetz            ###   ########.fr       */
+/*   Created: 2017/03/02 17:46:02 by bbetz             #+#    #+#             */
+/*   Updated: 2017/03/02 17:46:04 by bbetz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_get_stdin(char ***map)
+void		ft_putcolorendl(char *s, char *color)
 {
-	char	*line;
-
-	while (get_next_line(0, &line) > 0)
-	{
-		if (ft_str_is_void(line))
-			break ;
-		ft_strtabadd(map, line);
-		ft_strdel(&line);
-	}
-	ft_strdel(&line);
+	ft_putchar('\0');
+	ft_putstr(color);
+	ft_putstr(s);
+	ft_putstr(DEFAULT);
+	ft_putchar('\n');
 }

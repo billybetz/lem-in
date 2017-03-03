@@ -10,43 +10,54 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lem-in.h"
+#include "lem_in.h"
 
-void	recursive_deplacement(t_env *env, t_room **tmp, int i, t_room *tmp2, int *ant_name)
+static void	print_ant(int nb, t_room *room)
 {
-	if (!(tmp2->next->end))
-		recursive_deplacement(env, tmp, i, tmp2->next, ant_name);
-	if (tmp2->start == 1 && !(tmp2->next->nb_ants) && env->nb_ants > 0)
+	if (room->end)
 	{
-		ft_putchar('L');
-		ft_putnbr(*ant_name);
-		ft_putchar('-');
-		ft_putstr(tmp2->next->name);
-		ft_putchar(' ');
-		tmp2->next->ant_name = *ant_name;
-		tmp2->next->nb_ants++;
-		env->nb_ants--;
-		(*ant_name)++;
+		ft_putcolor("L", LIGHT_RED);
+		ft_putnbrcolor(nb, LIGHT_RED);
+		ft_putcolor("-", LIGHT_RED);
+		ft_putcolor(room->name, LIGHT_RED);
 	}
-	else if (tmp2->nb_ants && !(tmp2->next->nb_ants))
+	else
 	{
 		ft_putchar('L');
-		ft_putnbr(tmp2->ant_name);
+		ft_putnbr(nb);
 		ft_putchar('-');
-		ft_putstr(tmp2->next->name);
-		ft_putchar(' ');
-		tmp2->next->ant_name = tmp2->ant_name;
-		tmp2->nb_ants--;
-		tmp2->next->nb_ants++;
-		if (tmp2->next->end)
+		ft_putstr(room->name);
+	}
+	ft_putchar(' ');
+}
+
+static void	recursive_deplacement(t_env *e, int i_ant[2], t_room *tmp)
+{
+	if (!(tmp->next->end))
+		recursive_deplacement(e, i_ant, tmp->next);
+	if (tmp->start == 1 && !(tmp->next->nb_ants) && e->nb_ants > 0)
+	{
+		print_ant(i_ant[1], tmp->next);
+		tmp->next->ant_name = i_ant[1];
+		tmp->next->nb_ants++;
+		e->nb_ants--;
+		(i_ant[1])++;
+	}
+	else if (tmp->nb_ants && !(tmp->next->nb_ants))
+	{
+		print_ant(tmp->ant_name, tmp->next);
+		tmp->next->ant_name = tmp->ant_name;
+		tmp->nb_ants--;
+		tmp->next->nb_ants++;
+		if (tmp->next->end)
 		{
-			tmp2->next->nb_ants = 0;
-			env->arrive_ants++;
+			tmp->next->nb_ants = 0;
+			e->arrive_ants++;
 		}
 	}
 }
 
-void	all_in(t_env env)
+static void	all_in(t_env env)
 {
 	int i;
 
@@ -64,28 +75,27 @@ void	all_in(t_env env)
 	ft_putchar('\n');
 }
 
-void	moove_ants_in_paths(t_env *env)
+void		moove_ants_in_paths(t_env *env)
 {
 	t_room	**tmp;
 	t_room	*tmp2;
-	int		i;
-	int		ant_name;
+	int		i_ant[2];
 	int		nb_ants;
 
 	nb_ants = env->nb_ants;
 	env->arrive_ants = 0;
-	ant_name = 1;
+	i_ant[1] = 1;
 	if (env->unique_path)
 		return (all_in(*env));
 	while (env->arrive_ants < nb_ants)
 	{
-		i = 0;
+		i_ant[0] = 0;
 		tmp = env->paths;
-		while (tmp[i])
+		while (tmp[i_ant[0]])
 		{
-			tmp2 = tmp[i];
-			recursive_deplacement(env, tmp, i, tmp2, &ant_name);
-			i++;
+			tmp2 = tmp[i_ant[0]];
+			recursive_deplacement(env, i_ant, tmp2);
+			i_ant[0]++;
 		}
 		ft_putchar('\n');
 	}

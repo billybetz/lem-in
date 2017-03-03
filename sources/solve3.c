@@ -1,27 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_get_stdin.c                                     :+:      :+:    :+:   */
+/*   solve3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbetz <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/02/27 20:54:07 by bbetz             #+#    #+#             */
-/*   Updated: 2017/02/27 20:54:08 by bbetz            ###   ########.fr       */
+/*   Created: 2017/03/02 17:33:13 by bbetz             #+#    #+#             */
+/*   Updated: 2017/03/02 17:33:14 by bbetz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "lem_in.h"
 
-void	ft_get_stdin(char ***map)
+void		add_room_to_paths(int i, t_room *r, t_room ***paths)
 {
-	char	*line;
+	t_room *tmp;
 
-	while (get_next_line(0, &line) > 0)
+	if (!(*paths)[i])
 	{
-		if (ft_str_is_void(line))
-			break ;
-		ft_strtabadd(map, line);
-		ft_strdel(&line);
+		(*paths)[i] = create_maillon_room(r->name, r->start, r->end, r->coord);
 	}
-	ft_strdel(&line);
+	else
+	{
+		tmp = (*paths)[i];
+		while (tmp && tmp->next)
+			tmp = tmp->next;
+		tmp->next = create_maillon_room(r->name, r->start, r->end, r->coord);
+	}
+	if (!(r->start) && !(r->end))
+		r->dist_point = -5;
 }

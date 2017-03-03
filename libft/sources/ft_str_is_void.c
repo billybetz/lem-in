@@ -1,27 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_get_stdin.c                                     :+:      :+:    :+:   */
+/*   ft_str_is_void.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbetz <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/02/27 20:54:07 by bbetz             #+#    #+#             */
-/*   Updated: 2017/02/27 20:54:08 by bbetz            ###   ########.fr       */
+/*   Created: 2017/03/02 16:22:40 by bbetz             #+#    #+#             */
+/*   Updated: 2017/03/02 16:22:56 by bbetz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_get_stdin(char ***map)
+int		ft_str_is_void(const char *str)
 {
-	char	*line;
+	int i;
 
-	while (get_next_line(0, &line) > 0)
-	{
-		if (ft_str_is_void(line))
-			break ;
-		ft_strtabadd(map, line);
-		ft_strdel(&line);
-	}
-	ft_strdel(&line);
+	i = 0;
+	if (!str || !str[0])
+		return (1);
+	while (str[i] && ft_isspace(str[i]))
+		i++;
+	if (!str[i])
+		return (1);
+	return (0);
 }

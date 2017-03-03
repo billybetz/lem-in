@@ -1,27 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_get_stdin.c                                     :+:      :+:    :+:   */
+/*   ft_print_strtab.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbetz <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/02/27 20:54:07 by bbetz             #+#    #+#             */
-/*   Updated: 2017/02/27 20:54:08 by bbetz            ###   ########.fr       */
+/*   Created: 2017/03/02 15:56:38 by bbetz             #+#    #+#             */
+/*   Updated: 2017/03/02 15:56:39 by bbetz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_get_stdin(char ***map)
+void	ft_print_strtab(char **str)
 {
-	char	*line;
+	int i;
 
-	while (get_next_line(0, &line) > 0)
+	i = 0;
+	while (str && str[i])
 	{
-		if (ft_str_is_void(line))
-			break ;
-		ft_strtabadd(map, line);
-		ft_strdel(&line);
+		ft_putendl(str[i]);
+		i++;
 	}
-	ft_strdel(&line);
+	ft_putchar('\n');
 }

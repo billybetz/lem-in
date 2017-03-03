@@ -1,27 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_get_stdin.c                                     :+:      :+:    :+:   */
+/*   ft_str_count_c.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbetz <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/02/27 20:54:07 by bbetz             #+#    #+#             */
-/*   Updated: 2017/02/27 20:54:08 by bbetz            ###   ########.fr       */
+/*   Created: 2017/03/02 16:04:38 by bbetz             #+#    #+#             */
+/*   Updated: 2017/03/02 16:04:51 by bbetz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_get_stdin(char ***map)
+int		ft_str_count_c(char *s, char c)
 {
-	char	*line;
+	int nb;
+	int i;
 
-	while (get_next_line(0, &line) > 0)
+	i = 0;
+	nb = 0;
+	while (s[i])
 	{
-		if (ft_str_is_void(line))
-			break ;
-		ft_strtabadd(map, line);
-		ft_strdel(&line);
+		if (s[i] == c)
+			nb++;
+		i++;
 	}
-	ft_strdel(&line);
+	return (nb);
 }

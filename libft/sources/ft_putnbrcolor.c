@@ -1,27 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_get_stdin.c                                     :+:      :+:    :+:   */
+/*   ft_putnbrcolor.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbetz <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/02/27 20:54:07 by bbetz             #+#    #+#             */
-/*   Updated: 2017/02/27 20:54:08 by bbetz            ###   ########.fr       */
+/*   Created: 2017/03/02 17:52:45 by bbetz             #+#    #+#             */
+/*   Updated: 2017/03/02 17:52:45 by bbetz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_get_stdin(char ***map)
+void		ft_putnbrcolor(int n, char *color)
 {
-	char	*line;
+	unsigned int nb;
 
-	while (get_next_line(0, &line) > 0)
+	nb = n;
+	if (n < 0)
 	{
-		if (ft_str_is_void(line))
-			break ;
-		ft_strtabadd(map, line);
-		ft_strdel(&line);
+		ft_putcolor("-", color);
+		nb = -nb;
 	}
-	ft_strdel(&line);
+	if (nb < 10)
+	{
+		ft_putstr(color);
+		ft_putchar(nb + '0');
+		ft_putstr(DEFAULT);
+	}
+	if (nb > 9)
+	{
+		ft_putnbrcolor(nb / 10, color);
+		ft_putstr(color);
+		ft_putchar(nb % 10 + '0');
+		ft_putstr(DEFAULT);
+	}
 }
